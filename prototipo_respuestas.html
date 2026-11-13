@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prototipo - Respuesta automática de correos</title>
+<style>
+:root{--navy:#1f3154;--blue:#3866a8;--pale:#eef3fa;--line:#dce3ec;--text:#253247;--muted:#64748b;--green:#287a55;--red:#a33e3e;--amber:#92681d}
+*{box-sizing:border-box}body{margin:0;background:#f4f6f9;color:var(--text);font:14px Arial,sans-serif}
+header{background:var(--navy);color:white;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
+header h1{font-size:20px;margin:0}header small{opacity:.8}.wrap{max-width:1200px;margin:24px auto;padding:0 18px}
+.note{background:#fff8e8;border:1px solid #ead9a7;color:#6f571e;padding:11px 14px;border-radius:8px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}.stat b{display:block;font-size:23px;margin-top:5px}
+.layout{display:grid;grid-template-columns:330px 1fr;gap:16px}.panel{background:white;border:1px solid var(--line);border-radius:10px;overflow:hidden}.panel h2{font-size:15px;margin:0;padding:16px;border-bottom:1px solid var(--line)}
+.mail{padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer}.mail:hover,.mail.active{background:var(--pale)}.mail strong{display:block;margin-bottom:4px}.mail small{color:var(--muted)}.tag{display:inline-block;font-size:11px;padding:4px 7px;border-radius:20px;background:#edf1f6;margin-top:8px}.tag.green{background:#e5f4ed;color:var(--green)}.tag.amber{background:#fff3d9;color:var(--amber)}
+.content{padding:18px}.field{margin-bottom:14px}.field label{display:block;font-size:12px;font-weight:bold;color:var(--muted);margin-bottom:6px}.field div{padding:10px 11px;border:1px solid var(--line);border-radius:7px;background:#fafbfd;min-height:38px}.field textarea{width:100%;min-height:170px;resize:vertical;padding:12px;border:1px solid var(--line);border-radius:7px;font:14px/1.5 Arial;color:var(--text)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.actions button{border:0;border-radius:7px;padding:10px 14px;color:white;font-weight:bold;cursor:pointer}.approve{background:var(--green)}.reject{background:var(--red)}.reset{background:#64748b}.status{margin-top:14px;padding:11px;border-radius:7px;background:#eef3fa;color:var(--navy);min-height:40px}.foot{color:var(--muted);font-size:12px;margin-top:18px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><div><h1>Centro de respuestas</h1><small>Prototipo académico · revisión de mensajes</small></div><div>Cuenta: demo@correo.com</div></header>
+<div class="wrap">
+<div class="note"><b>Prototipo:</b> los correos son ficticios. Los botones simulan la aprobación o el rechazo; no se conecta a una cuenta ni se envían mensajes reales.</div>
+<div class="stats"><div class="stat">Mensajes recibidos<b id="countAll">3</b></div><div class="stat">Pendientes de revisión<b id="countPending">3</b></div><div class="stat">Aprobados / rechazados<b id="countDone">0</b></div></div>
+<div class="layout">
+<section class="panel"><h2>Bandeja de entrada</h2><div id="mailList">
+<div class="mail active" data-index="0"><strong>Consulta sobre el servicio</strong><small>Laura Gómez · Hoy, 9:15 a. m.</small><br><span class="tag">Consultas generales</span></div>
+<div class="mail" data-index="1"><strong>Solicitud de cotización</strong><small>Andrés Ruiz · Hoy, 8:42 a. m.</small><br><span class="tag">Cotizaciones</span></div>
+<div class="mail" data-index="2"><strong>Queja por demora</strong><small>María Torres · Ayer, 4:30 p. m.</small><br><span class="tag amber">Quejas</span></div>
+</div></section>
+<section class="panel"><h2>Revisión del mensaje</h2><div class="content">
+<div class="field"><label>REMITENTE</label><div id="sender">Laura Gómez · laura@example.com</div></div>
+<div class="field"><label>ASUNTO</label><div id="subject">Consulta sobre el servicio</div></div>
+<div class="field"><label>CONTENIDO RECIBIDO</label><div id="body">Buenos días. Quisiera conocer cuáles son los horarios de atención y cómo puedo solicitar el servicio.</div></div>
+<div class="field"><label>CATEGORÍA</label><div id="category">Consultas generales</div></div>
+<div class="field"><label>BORRADOR DE RESPUESTA (SE PUEDE EDITAR)</label><textarea id="draft">Buenos días, Laura. Gracias por contactarnos. Nuestro equipo puede orientarle sobre los horarios de atención y el procedimiento para solicitar el servicio. Por favor, indíquenos qué día le interesa para darle información más precisa.</textarea></div>
+<div class="actions"><button class="approve" onclick="decide('Aprobado (simulación de envío)')">Simular aprobación y envío</button><button class="reject" onclick="decide('Rechazado (no se envía)')">Rechazar borrador</button><button class="reset" onclick="resetAll()">Restablecer demo</button></div>
+<div class="status" id="status">Estado: Borrador pendiente de revisión.</div><div class="foot">La decisión se refleja únicamente en esta pantalla de demostración. No se almacena ni se envía información real.</div>
+</div></section>
+</div></div>
+<script>
+const mails=[
+{sender:'Laura Gómez · laura@example.com',subject:'Consulta sobre el servicio',body:'Buenos días. Quisiera conocer cuáles son los horarios de atención y cómo puedo solicitar el servicio.',category:'Consultas generales',draft:'Buenos días, Laura. Gracias por contactarnos. Nuestro equipo puede orientarle sobre los horarios de atención y el procedimiento para solicitar el servicio. Por favor, indíquenos qué día le interesa para darle información más precisa.'},
+{sender:'Andrés Ruiz · andres@example.com',subject:'Solicitud de cotización',body:'Buen día. Necesito una cotización para el servicio. ¿Qué información debo enviar?',category:'Cotizaciones',draft:'Buen día, Andrés. Con gusto podemos revisar su solicitud. Para preparar la cotización, por favor compártanos una descripción del servicio que necesita y la fecha aproximada en que lo requiere.'},
+{sender:'María Torres · maria@example.com',subject:'Queja por demora',body:'Me comunico porque no he recibido respuesta a mi solicitud anterior. Agradezco revisar el caso.',category:'Quejas',draft:'Buen día, María. Lamentamos la demora en la respuesta. Hemos recibido su mensaje y revisaremos el estado de su solicitud para brindarle información.'}
+];
+let selected=0;let states=['Pendiente','Pendiente','Pendiente'];
+function loadMail(i){selected=i;document.querySelectorAll('.mail').forEach((el,j)=>el.classList.toggle('active',j===i));let m=mails[i];sender.textContent=m.sender;subject.textContent=m.subject;body.textContent=m.body;category.textContent=m.category;draft.value=m.draft;status.textContent='Estado: '+states[i]+'.';}
+function decide(value){states[selected]=value;status.textContent='Estado: '+value+'.';updateStats();}
+function updateStats(){let pending=states.filter(s=>s==='Pendiente').length;countPending.textContent=pending;countDone.textContent=states.length-pending;}
+function resetAll(){states=['Pendiente','Pendiente','Pendiente'];loadMail(0);updateStats();}
+document.querySelectorAll('.mail').forEach(el=>el.addEventListener('click',()=>loadMail(Number(el.dataset.index))));
+</script></body></html>

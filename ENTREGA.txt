@@ -1,0 +1,1 @@
+El documento principal del taller se entrega por separado. Esta carpeta contiene el repositorio de evidencias: README, requisitos, cambios, matriz CSV, criterios, prototipo y notebook.

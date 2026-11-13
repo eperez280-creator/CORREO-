@@ -1,0 +1,9 @@
+﻿Necesidad,Requisito,Historia,Caso_Uso,Diseño,Codigo,Prueba,Estado
+Necesidad N-01: conectar una cuenta para atender correos,RF-01,US-01,CU-01,DS-01: pantalla de conexión,src/auth_mail.py,TC-01,Trazabilidad definida; implementación por desarrollar
+Necesidad N-02: identificar mensajes nuevos,RF-02,US-02,CU-02,DS-02: bandeja de entrada,src/mail_reader.py,TC-02,Trazabilidad definida; implementación por desarrollar
+Necesidad N-03: organizar los correos por tema,RF-03,US-03,CU-03,DS-03: categoría en cada mensaje,src/classifier.py,TC-03,Trazabilidad definida; implementación por desarrollar
+Necesidad N-04: reducir la redacción manual,RF-04,US-04,CU-04,DS-04: vista del borrador,src/response_generator.py,TC-04,Trazabilidad definida; implementación por desarrollar
+Necesidad N-05: mantener control humano antes de enviar,RF-05,US-05,CU-05,DS-05: panel de revisión,src/approval_view.py,TC-05,Trazabilidad definida; implementación por desarrollar
+Necesidad N-06: proteger la cuenta de correo,RNF-01,US-06,CU-01,DS-01: conexión segura,src/auth_mail.py,TC-06,Trazabilidad definida; implementación por desarrollar
+Necesidad N-07: evitar acceso indebido al contenido,RNF-02,US-07,CU-06,DS-06: control de permisos,src/access_control.py,TC-07,Trazabilidad definida; implementación por desarrollar
+Necesidad N-08: evitar respuestas duplicadas,RNF-03,US-08,CU-07,DS-07: registro de envío,src/send_control.py,TC-08,Trazabilidad definida; implementación por desarrollar

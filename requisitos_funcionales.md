@@ -1,0 +1,7 @@
+# Requisitos funcionales
+
+- **RF-01** (Alta): El sistema debe permitir que un usuario autorizado conecte una cuenta de correo mediante el mecanismo de autenticación segura ofrecido por el proveedor. Debe informar si la conexión fue exitosa o si ocurrió un error. Si la autorización falla, la cuenta debe permanecer desconectada.
+- **RF-02** (Alta): El sistema debe consultar la cuenta conectada e identificar los mensajes nuevos recibidos. Cada mensaje debe registrarse usando el identificador que entrega el proveedor de correo, para evitar que el mismo mensaje se procese más de una vez.
+- **RF-03** (Alta): El sistema debe asignar a cada mensaje recibido una de estas categorías: solicitudes, quejas, cotizaciones, pedidos o consultas generales. Cuando no tenga información suficiente para asignar una categoría, debe marcarlo como “Sin clasificar” y permitir que el usuario lo revise.
+- **RF-04** (Alta): El sistema debe elaborar un borrador de respuesta relacionado con el asunto y el contenido del correo recibido. El borrador debe quedar identificado como “Borrador” y no debe enviarse por el solo hecho de haber sido generado.
+- **RF-05** (Alta): El sistema debe permitir que un usuario autorizado consulte el remitente, el asunto, el contenido del mensaje, su categoría y el borrador de respuesta. El usuario puede editarlo, aprobarlo para su envío o rechazarlo. Solamente una respuesta aprobada puede enviarse. Una respuesta rechazada no se envía y su estado queda registrado.
